@@ -60,3 +60,4 @@ cat "$TMP_OUTPUT" >>"$README"
 rm -f "$TMP_OUTPUT"
 
 echo "✅ README.md 已更新为表格形式的子项目索引"
+git add README.md
