@@ -82,3 +82,14 @@ Hello, Bazel Bzlmod!
 发现成功输出了Hello的字符串😄
 
 建议第一次接触Bazel的同学可以按照该项目的顺序进行阅读理解。
+
+
+
+<!-- BEGIN SUBPROJECTS -->
+<!-- BEGIN SUBPROJECTS -->
+## 🧩 子项目索引
+
+### [sampleBazel](./sampleBazel)
+  最简单的go结合Bazel的例子，go会在控制台输出一串字符串，这里主要介绍一个最简单的基于Bazel的go项目是怎么做的。
+
+<!-- END SUBPROJECTS -->
