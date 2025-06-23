@@ -1,0 +1,22 @@
+# 定义整个项目/模块的信息，这里的name和version都是自定义的
+module(
+    name = "go_bzlmod_minimal",
+    version = "1.0",
+)
+# 这个函数是Bazel用来声明外部依赖的指令
+# 下面这一行，说明需要使用官方提供的rules_go规则库，并且指定了版本
+# 具体最新的版本可以在这里查看：https://registry.bazel.build/search?q=rules_go
+# 对应的github地址：https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/rules_go
+# rules_go 是一个 Bazel 的 Go 语言构建规则库，它定义了如 go_binary、go_library、go_test 等构建目标的实现方式
+# 可以理解为，告诉bazel这个项目是一个go的项目
+bazel_dep(name = "rules_go", version = "0.54.1")
+
+# 在 Bazel 的 Bzlmod 模块系统 中，启用并调用 rules_go 提供的一个扩展（module extension）。
+# go_sdk表示调用该文件中暴露出的 go_sdk 扩展接口（不是函数，而是一个 module extension 对象）
+# 把这个扩展的返回引用赋值给变量，方便下面使用
+my_go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
+# 使用这个返回的变了，调用download下载指定版本的golang，后续项目使用的go的版本就是这里指定的
+my_go_sdk.download(version = "1.24.2")
+
+# 当然也可以直接用本地的,
+# my_go_sdk.host()

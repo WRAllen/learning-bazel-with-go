@@ -1,0 +1,84 @@
+# 项目介绍
+
+Bazel主要是Google作为单仓（Monorepo）的支持，Bazel支持在一个多语言仓库里面进行统一的build，也就是一个仓库里面有python、golang、java等用他就可以进行很好的管理。
+
+这是一个基于bazel的go的项目集合，主要目的在于学习如何使用bazel进行go项目的打包和运行，是一个自学项目，希望也能帮到其他正在入门学习Bazel的同学😄
+
+# 依赖
+
+使用brew安装Bazelist（官方推荐的安装方式）
+
+```shell
+brew install bazelisk
+```
+
+如果是brew进行直接安装bazel，可能安装的版本比较老，这里我用bazelisk，安装好bazelisk其实你就安装上了最新版本的Bazel了，默认会在如下位置
+
+```shell
+-> % which bazel      
+/usr/local/bin/bazel
+```
+
+
+本项目使用的是如下版本：
+
+```
+Bazelisk version: 1.25.0
+Build label: 8.2.1
+Build target: @@//src/main/java/com/google/devtools/build/lib/bazel:BazelServer
+Build time: Thu Apr 17 18:37:44 2025 (1744915064)
+Build timestamp: 1744915064
+Build timestamp as int: 1744915064
+```
+
+
+# 说明
+
+为了避免创建多个Repo进行学习，这里统一放在一起，每个子目录下为具体的bazel项目，具体信息请根据子目录下的README.md进行了解
+
+
+## 举例
+
+本地测试时，可具体cd到子目录进行处理，下面用sampleBazel子目录进行演示通用流程
+
+```
+# 进入子目录
+cd sampleBazel
+
+# 阅读该目录的README.md文件
+
+# 尝试直接运行服务
+make run 
+
+```
+
+输出如下
+
+```shell
+-> % make run
+bazel clean --expunge
+INFO: Starting clean (this may take a while). Use --async if the clean takes more than several minutes.
+bazel build //...
+Starting local Bazel server (8.2.1) and connecting to it...
+INFO: Analyzed target //:hello (83 packages loaded, 5981 targets configured).
+INFO: Found 1 target...
+Target //:hello up-to-date:
+  bazel-bin/hello_/hello
+INFO: Elapsed time: 62.661s, Critical Path: 37.68s
+INFO: 10 processes: 6 internal, 4 darwin-sandbox.
+INFO: Build completed successfully, 10 total actions
+bazel run //...
+INFO: Analyzed target //:hello (0 packages loaded, 0 targets configured).
+INFO: Found 1 target...
+Target //:hello up-to-date:
+  bazel-bin/hello_/hello
+INFO: Elapsed time: 0.230s, Critical Path: 0.00s
+INFO: 1 process: 1 internal.
+INFO: Build completed successfully, 1 total action
+INFO: Running command line: bazel-bin/hello_/hello
+Hello, Bazel Bzlmod!
+```
+
+发现成功输出了Hello的字符串😄
+
+建议第一次接触Bazel的同学可以按照该项目的顺序进行阅读理解。

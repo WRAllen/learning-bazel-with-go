@@ -1,0 +1,14 @@
+# Bazel output
+bazel-*
+
+# Bazel build output directory
+bazel-bin/
+bazel-out/
+bazel-testlogs/
+bazel-genfiles/
+
+# Bazel workspace status file (有时生成)
+workspace_status.txt
+
+# Bazel cache (如果你在项目目录下用到了缓存文件夹)
+.cache/
