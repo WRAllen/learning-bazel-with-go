@@ -1,6 +1,8 @@
 # 介绍
 
-最简单的go结合Bazel的例子，go会在控制台输出一串字符串，这里主要介绍一个最简单的基于Bazel的go项目是怎么做的。
+最简单的go结合Bazel的例子，go会在控制台输出一串字符串
+
+这里主要介绍一个最简单的基于Bazel的go项目是怎么做的。
 
 # 运行方式
 
@@ -91,6 +93,5 @@ make build
   * `test.xml`：JUnit 风格报告
   * `status.txt`：测试结果状态（PASSED, FAILED 等）
 * 是调试测试失败最重要的地方。
-
 
 bazel run其实run的也是bin下面构建的产物
