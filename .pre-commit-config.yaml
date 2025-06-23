@@ -6,3 +6,8 @@ repos:
         entry: ./gen_readme_index.sh
         language: script
         stages: [pre-commit]
+      - id: gofmt
+        name: gofmt
+        entry: gofmt -s -w
+        language: system
+        types: [go]

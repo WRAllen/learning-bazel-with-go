@@ -1,8 +1,20 @@
+# load是Bazel用来倒入其他bzl文件里面定义的规则或者是函数的
+# 这里从rules_go这个外部依赖仓库的go:def.bzl文件里面加载了go_binary的规则
+# go_binary时rules_go提供的用来编译Go可执行程序的Bazel规则
 load("@rules_go//go:def.bzl", "go_binary")
 
+# 调用go_binary这个规则来定义一个名叫hello的目标
+# name是目标的名称
+# srcs是这个目标的源代码文件列表
+# importpath是这个Go程序的导入路径，也就是其他go的包名称，这个后续在其他项目里面说明
+# visibility是这个目标的可见性，//visibility:public表示这个目标对所有其他目标都是可见的
+# //visibility:private      只有当前包内可以使用（默认值）
+# //some/package:__pkg__    像这样的就是指定某个包可以引用，可以写多个用,分割
 go_binary(
     name = "hello",
     srcs = ["main.go"],
     importpath = "example.com/hello",
     visibility = ["//visibility:public"],
 )
+# 这个目标会编译成一个名为hello的可执行文件，可以直接用bazel run hello来运行它
+# 也可以用Makefile里面的bazel run //...来跑
