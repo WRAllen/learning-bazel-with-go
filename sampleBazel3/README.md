@@ -1,14 +1,17 @@
 # 介绍
 
-这是一个多层次的简单go服务
+这是一个多层次的有依赖第三方包的go的web项目
 
-主要用于展示go里面多个包之间存着引用时，BUILD要怎么写。
+介绍了基于gazelle如何去自动生成BUILD.bazel文件
 
 # 运行方式
 
 ```
 # 清除Bazel生成的文件
 make clean
+
+# 使用gazelle生成BUILD文件（这里其实已经生成好了）
+make build
 
 # 使用Bazel进行打包
 make build
@@ -26,7 +29,7 @@ make run
 结构如下：
 
 ```
--> % tree
+-> % tree   
 .
 ├── BUILD.bazel
 ├── MODULE.bazel
@@ -34,24 +37,62 @@ make run
 ├── Makefile
 ├── README.md
 ├── go.mod
+├── go.sum
 ├── main.go
 └── pkg
     ├── BUILD.bazel
-    ├── controller.go
-    └── log
-        ├── BUILD.bazel
-        └── log.go
+    └── controller.go
 
-3 directories, 11 files
+2 directories, 10 files
 ```
 
-可以看到每个目录下，都有一个BUILD文件，根目录，pkg，以及pkg/log这3个目录都有自己的BUILD.bazel
+该项目主要介绍了如果有第三方的包的依赖，如果在Bazel里面做好，sampleBazel2由于用的都是go内置的包，所以不涉及。该web项目使用了第三方的zap包，替代2里面和日志相关的输出
 
-和sampleBazel发现多了一个deps的字段，里面声明了具体的依赖，bazel需要用户显示的在deps里面申明依赖（但是第三方的包比如go.mod里面的他就会自动的加载到deps，这个后续介绍）
+这里zap只是作为一个例子，其他的依赖也是同理。
 
-也就是你用了xxx文件夹下的x，你就要在deps里面加上，不然build的时候就会报错了。
+最重要的在于在MODULE里面定义好gazelle相关的部分，下面摘出相关部分代码，具体说明请到对应文件里面阅读
 
-这里还用到了BUILD里面的import字段，在 Bazel 的 BUILD 文件中，importpath 字段必须与你在 Go 代码中实际使用的 import 路径保持一致
+```
+bazel_dep(name = "gazelle", version = "0.43.0")
+
+go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
+go_deps.from_file(go_mod = "//:go.mod")
+
+use_repo(go_deps, "org_uber_go_zap")
+
+```
+
+由于我也在学习阶段，这里被GPT坑了几次，相关的坑也写在MODULE.bazel文件里面了，这里还知道了一个bazel的命令
+
+```
+bazel mod tidy
+```
+
+这个同go的tidy，他会去整理文件会 **解析并检查你的 `MODULE.bazel` 文件，下载依赖，并更新 `.lock` 文件** ，以确保 Bazel 构建环境中的所有依赖是最小且一致的。
+
+MODULE.bazel文件写完后，其他的BUILD.bazel文件就简单了，如下
+
+```
+load("@gazelle//:def.bzl", "gazelle")
+
+gazelle(name = "gazelle")
+
+```
+
+只需要在你每个目录下面创建一个BUILD文件，写上上面2行
+
+然后再运行
+
+```
+# 或者是Makefile里面写好的make generate
+bazel run //:gazelle
+
+```
+
+他就会自动的去更新对应BUILD文件里面的内容，把需要用到的第三方依赖写到BUILD里面的deps里，然后就可以更新到MODULE里面的use_repo下，具体也是见根目录的BUILD和pkg下面的BUILD。
+
+至此就完成了有第三方依赖的项目
+
 
 ## 运行结果
 
@@ -61,33 +102,23 @@ make run
 -> % make run  
 bazel clean --expunge
 INFO: Starting clean (this may take a while). Use --async if the clean takes more than several minutes.
-bazel build //:sampleBazel2
+bazel build //:sampleBazel3
 Starting local Bazel server (8.3.0) and connecting to it...
-INFO: Analyzed target //:sampleBazel2 (88 packages loaded, 5999 targets configured).
+INFO: Analyzed target //:sampleBazel3 (97 packages loaded, 6058 targets configured).
 INFO: Found 1 target...
-Target //:sampleBazel2 up-to-date:
-  bazel-bin/sampleBazel2_/sampleBazel2
-INFO: Elapsed time: 61.270s, Critical Path: 38.87s
-INFO: 12 processes: 6 internal, 6 darwin-sandbox.
-INFO: Build completed successfully, 12 total actions
-bazel run //:sampleBazel2
-INFO: Analyzed target //:sampleBazel2 (32 packages loaded, 316 targets configured).
+Target //:sampleBazel3 up-to-date:
+  bazel-bin/sampleBazel3_/sampleBazel3
+INFO: Elapsed time: 69.904s, Critical Path: 36.33s
+INFO: 21 processes: 6 internal, 15 darwin-sandbox.
+INFO: Build completed successfully, 21 total actions
+bazel run //:sampleBazel3
+INFO: Analyzed target //:sampleBazel3 (32 packages loaded, 316 targets configured).
 INFO: Found 1 target...
-Target //:sampleBazel2 up-to-date:
-  bazel-bin/sampleBazel2_/sampleBazel2
-INFO: Elapsed time: 0.690s, Critical Path: 0.00s
+Target //:sampleBazel3 up-to-date:
+  bazel-bin/sampleBazel3_/sampleBazel3
+INFO: Elapsed time: 0.627s, Critical Path: 0.00s
 INFO: 1 process: 1 internal.
 INFO: Build completed successfully, 1 total action
-INFO: Running command line: bazel-bin/sampleBazel2_/sampleBazel2
-🚀 Server is running on http://localhost:8080
+INFO: Running command line: bazel-bin/sampleBazel3_/sampleBazel3
+{"level":"info","ts":1750763064.1256928,"caller":"pkg/controller.go:25","msg":"Starting server","port":"8080"}
 ```
-
-可以发现http服务正常启动了，下面测试一下
-
-```
--> % curl http://localhost:8080
-Hello, World! 🌍
-
-```
-
-发现也是正常输出了对应的结果了。

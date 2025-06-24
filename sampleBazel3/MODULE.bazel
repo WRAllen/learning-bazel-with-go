@@ -17,10 +17,13 @@ my_go_sdk.download(version = "1.24.2")
 # 这里让GPT去生成，会生成为如下内容
 # go_deps = use_extension("@rules_go//go:extensions.bzl", "go_deps")
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
+
 # 这里说明了go_deps的from_file方法是从go.mod文件中读取依赖
 go_deps.from_file(go_mod = "//:go.mod")
+
 # 这里这个org_uber_go_zap是从哪里来呢？
 # 其实先运行 bazel run //:gazelle
 # 让gazelle去各个BUILD里面自动生成需要的依赖，然后再从deps里面摘抄到这里，多个用,分割
+# 这里就算刚开始没加，跑完bazel run //:gazelle后，再跑bazel build //:sampleBazel3，也会提示@@[unknown repo 'org_uber_go_zap' requested from @@]//
+# 这样就知道要把org_uber_go_zap补在这里了
 use_repo(go_deps, "org_uber_go_zap")
-
