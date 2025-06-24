@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "pkg",
+    srcs = ["controller.go"],
+    # 可以发现这里和上层的BUILD.bazel文件里面的deps不一样
+    # //pkg/log 实际上等价于 //pkg/log:log。
+    # 这是Bazel的语法糖，如果某个路径下存在 BUILD 文件，并且该路径的包名为 pkg/xxx，你可以直接用 //pkg/xxx 来引用该包下默认的 target。
+    deps = ["//pkg/log"],
+    importpath = "github.com/wrallen/sampleBazel2/pkg",
+    visibility = ["//visibility:public"],
+)

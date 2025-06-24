@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_binary")
+
+# 下面直接用正常go.mod里面定义的项目名称
+go_binary(
+    name = "sampleBazel2",
+    srcs = ["main.go"],
+    # 这里很‼️重要‼️
+    # deps里面的路径是Bazel包路径格式，//pkg:pkg指的是项目根目录下的pkg文件夹下，名字叫pkg的目标
+    # 如果我们pkg的目录假设是pkgs，pkgs下面的BUILD文件里面是a，那这里就是//pkgs:a
+    # PS：也可以直接写成//pkg，这个在pkg下的BUILD里面有详细说明
+    deps = ["//pkg:pkg"],
+    # 如果第三方有用到这个，他import的时候就会用到这个路径
+    importpath = "github.com/wrallen/sampleBazel2",
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,10 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "log",
+    srcs = ["log.go"],
+    # go程序引用这个包时的路径
+    # 这里被controller.go引用了，要和他一摸一样，不然build会出现问题
+    importpath = "github.com/wrallen/sampleBazel2/pkg/log",
+    visibility = ["//visibility:public"],
+)

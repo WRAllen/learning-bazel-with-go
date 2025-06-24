@@ -12,3 +12,7 @@ build:
 # 当前项目等价于 bazel run //:hello
 run: clean build
 	bazel run //...
+
+# 正常直接使用go进行运行
+go-run:
+	go run main.go

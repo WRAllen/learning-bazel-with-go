@@ -1,0 +1,15 @@
+# name这里注意，不能用大写的字母
+# 可以使用下划线、连字符、点，例如：
+# "sample_bazel2"
+# "sample-bazel2"
+# "sample.bazel2"
+# 这里这个名字和后续你要bazel build/rub的无关
+module(
+    name = "sample_bazel_2",
+    version = "1.0",
+)
+# 下面这些同sampleBazel里一样
+bazel_dep(name = "rules_go", version = "0.54.1")
+
+my_go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
+my_go_sdk.download(version = "1.24.2")
