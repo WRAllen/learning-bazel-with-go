@@ -6,7 +6,7 @@ Bazel主要是Google作为单仓（Monorepo）的支持，Bazel支持在一个�
 
 # 依赖
 
-使用brew安装Bazelist（官方推荐的安装方式）
+使用brew安装Bazelisk（官方推荐的安装方式）
 
 ```shell
 brew install bazelisk
@@ -15,10 +15,9 @@ brew install bazelisk
 如果是brew进行直接安装bazel，可能安装的版本比较老，这里我用bazelisk，安装好bazelisk其实你就安装上了最新版本的Bazel了，默认会在如下位置
 
 ```shell
--> % which bazel      
+-> % which bazel    
 /usr/local/bin/bazel
 ```
-
 
 本项目使用的是如下版本：
 
@@ -31,11 +30,9 @@ Build timestamp: 1744915064
 Build timestamp as int: 1744915064
 ```
 
-
 # 说明
 
 为了避免创建多个Repo进行学习，这里统一放在一起，每个子目录下为具体的bazel项目，具体信息请根据子目录下的README.md进行了解
-
 
 ## 举例
 
@@ -86,9 +83,11 @@ Hello, Bazel Bzlmod!
 # 下面是具体的子项目和其介绍
 
 <!-- BEGIN SUBPROJECTS -->
+
 ## 🧩 子项目索引
 
-| 子项目 | 简介 |
-|--------|------|
-| 🔹 [sampleBazel](./sampleBazel) | 最简单的go结合Bazel的例子，go会在控制台输出一串字符串<br>这里主要介绍一个最简单的基于Bazel的go项目是怎么做的。<br> |
+| 子项目                      | 简介                                                                                                                       |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| 🔹[sampleBazel](./sampleBazel) | 最简单的go结合Bazel的例子，go会在控制台输出一串字符串`<br>`这里主要介绍一个最简单的基于Bazel的go项目是怎么做的。`<br>` |
+
 <!-- END SUBPROJECTS -->
