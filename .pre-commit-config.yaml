@@ -1,11 +1,11 @@
 repos:
   - repo: local
     hooks:
-      - id: gen-readme
-        name: Generate README index
-        entry: ./gen_readme_index.sh
-        language: script
-        stages: [pre-commit]
+      # - id: gen-readme
+      #   name: Generate README index
+      #   entry: ./gen_readme_index.sh
+      #   language: script
+      #   stages: [pre-commit]
       - id: gofmt
         name: gofmt
         entry: gofmt -s -w

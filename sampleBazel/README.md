@@ -45,7 +45,7 @@ make run
 ├── MODULE.bazel.lock	这个文件是自动生成的，在build的时生成
 ```
 
-`MODULE.bazel`(也可以不要后缀，直接写成BUILD，但是现在还是推荐带后缀，对于idea比较友好) 是 Bazel 的 **Bzlmod 模块系统**的配置文件
+`MODULE.bazel`(也可以不要后缀，直接写成BUILD，但是现在还是推荐带后缀，对于idea比较友好，并且官方说如果同时存在BUILD.bazel和BUILD优先加载前者) 是 Bazel 的 **Bzlmod 模块系统**的配置文件
 
 `BUILD` 文件是 Bazel 的 **构建规则定义文件** ，控制项目的**源码如何被编译、打包、测试**等。（每个使用到的代码目录下都应该有一个这样的文件进行申明，具体后续项目介绍）
 
