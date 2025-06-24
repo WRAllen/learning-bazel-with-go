@@ -1,19 +1,26 @@
+# 步骤1: 加载gazelle相关的
 load("@gazelle//:def.bzl", "gazelle")
+
+# gazelle自动生成的
 load("@rules_go//go:def.bzl", "go_binary", "go_library")
 
+# 步骤2: 定义gazelle
+# 定义一个可运行的 gazelle 目标， 可以通过bazel run //:gazelle来生成或者更新BUILD
+# 其实这个文件我只写了步骤1，和步骤2
 gazelle(name = "gazelle")
 
-go_binary(
-    name = "sampleBazel3",
-    embed = [":sampleBazel3_lib"],
-    importpath = "github.com/wrallen/sampleBazel3",
-    visibility = ["//visibility:public"],
-)
-
+# gazelle自动生成的
 go_library(
     name = "sampleBazel3_lib",
     srcs = ["main.go"],
     importpath = "github.com/wrallen/sampleBazel3",
     visibility = ["//visibility:private"],
     deps = ["//pkg"],
+)
+
+# gazelle自动生成的
+go_binary(
+    name = "sampleBazel3",
+    embed = [":sampleBazel3_lib"],
+    visibility = ["//visibility:public"],
 )

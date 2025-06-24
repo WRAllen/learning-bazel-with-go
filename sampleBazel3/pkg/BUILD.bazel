@@ -1,9 +1,20 @@
+# 本文件同根目录下的BUILD.bazel文件只写了步骤1～2，其他都是自动生成的
+
+# 步骤1: 加载gazelle相关的
+load("@gazelle//:def.bzl", "gazelle")
+
+# gazelle自动生成
 load("@rules_go//go:def.bzl", "go_library")
 
+# 步骤2: 定义gazelle
+gazelle(name = "gazelle")
+
+# gazelle自动生成
 go_library(
     name = "pkg",
     srcs = ["controller.go"],
     importpath = "github.com/wrallen/sampleBazel3/pkg",
     visibility = ["//visibility:public"],
+    # 这里就是MODULE.bazel里面use_repo用到的内容了
     deps = ["@org_uber_go_zap//:zap"],
 )
