@@ -88,5 +88,5 @@ Hello, Bazel Bzlmod!
 | 子项目 | 简介 |
 |--------|------|
 | 🔹 [sampleBazel](./sampleBazel) | 最简单的go结合Bazel的例子，go会在控制台输出一串字符串<br>这里主要介绍一个最简单的基于Bazel的go项目是怎么做的。<br> |
-| 🔹 [sampleBazel2](./sampleBazel2) | 这是一个多层次的简单go服务，主要用于展示go里面多个包之间存着引用时，BUILD要怎么写。<br> |
+| 🔹 [sampleBazel2](./sampleBazel2) | 这是一个多层次的简单go服务<br>主要用于展示go里面多个包之间存着引用时，BUILD要怎么写。<br> |
 <!-- END SUBPROJECTS -->
