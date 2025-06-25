@@ -1,0 +1,13 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "pkg",
+    srcs = ["service.go"],
+    importpath = "github.com/wrallen/sampleBazel5/pkg",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//config",
+        "@org_uber_go_zap//:zap",
+        "@org_uber_go_zap//zapcore",
+    ],
+)

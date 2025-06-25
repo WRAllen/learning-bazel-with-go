@@ -1,0 +1,25 @@
+# 本文件除了注释上标注的为手写外，其余都是自动生成
+# 手写
+load("@gazelle//:def.bzl", "gazelle")
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+# 手写
+gazelle(name = "gazelle")
+
+go_library(
+    name = "sampleBazel5_lib",
+    srcs = ["main.go"],
+    # 手写
+    # 这里用到了config下面BUILD定义好的文件相关的资源
+    # 把all_configs对应的文件打包进来打包进来
+    data = ["//config:all_configs"],
+    importpath = "github.com/wrallen/sampleBazel5",
+    visibility = ["//visibility:private"],
+    deps = ["//cmd"],
+)
+
+go_binary(
+    name = "sampleBazel5",
+    embed = [":sampleBazel5_lib"],
+    visibility = ["//visibility:public"],
+)
