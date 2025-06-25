@@ -2,7 +2,7 @@
 
 这是一个多层次的有依赖第三方包的go的web项目
 
-介绍了基于gazelle如何去自动更新/生成BUILD.bazel文件
+介绍了基于gazelle如何去自动更新BUILD.bazel文件
 
 # 运行方式
 
@@ -50,6 +50,8 @@ make run
 
 这里zap只是作为一个例子，其他的依赖也是同理。
 
+### 定义MODULE.bazel
+
 最重要是在MODULE里面定义好gazelle相关的部分，下面摘出gazelle相关代码，具体说明注释请到对应文件里面阅读
 
 ```
@@ -70,6 +72,8 @@ bazel mod tidy
 
 这个同go的tidy，他会去整理文件会 **解析并检查你的 `MODULE.bazel` 文件，下载依赖，并更新 `.lock` 文件** ，以确保 Bazel 构建环境中的所有依赖是最小且一致的。
 
+### 定义BUILD.bazel
+
 MODULE.bazel文件写完后，其他的BUILD.bazel文件就简单了，如下
 
 ```
@@ -89,11 +93,46 @@ bazel run //:gazelle
 
 ```
 
-他就会自动的去更新对应BUILD文件里面的内容(也可以不写，只写根目录的BUILD，然后其他BUILD通过上面的gazelle命令进行自动生成)，帮你编写BUILD文件需要的一切，
+他就会自动的去更新对应BUILD文件里面的内容，帮你编写BUILD文件需要的一切，（sampleBazel4里介绍如何自动生成BUILD）
 
-比如go_library这些，他都会自动去生成，并且会把需要用到的第三方依赖写到BUILD里面的deps里，然后就可以更新到MODULE里面的use_repo下，
+比如go_library这些，他都会自动去生成，会把需要用到的第三方依赖自动写到对应BUILD里面的deps里，
 
 具体也是见根目录的BUILD和pkg下面的BUILD。
+
+### 更新MODULE里的use_repo依赖
+
+上面BUILD自动生成后，然后就摘抄deps里面的依赖更新到MODULE里面的use_repo下，
+
+这里注意，比如某个BUILD里面的deps如下
+
+```
+@org_uber_go_zap//:zap
+```
+
+写到use_repo里面时只需要
+
+```
+org_uber_go_zap
+```
+
+### 另一种更新MODULE的依赖方式
+
+当然也有一种办法能不用一个一个去子目录的BUILD里面摘抄deps，直接写
+
+```
+# go_deps后面啥也不写
+use_repo(go_deps)
+```
+
+然后运行 `bazel run //:gazelle `就会出现如下的提示
+
+```
+Not imported, but reported as direct dependencies by the extension (may cause the build to fail):
+   org_uber_go_zap
+```
+
+把这些摘抄到use_repo里面就行（sampleBazel4里面介绍如何自动生成相关依赖）
+
 
 至此就完成了有第三方依赖的项目
 
