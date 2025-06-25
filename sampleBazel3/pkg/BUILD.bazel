@@ -18,3 +18,14 @@ go_library(
     # 这里就是MODULE.bazel里面use_repo用到的内容了
     deps = ["@org_uber_go_zap//:zap"],
 )
+
+# 该文件也可以不写，直接用gazelle自动生成，具体生成如下
+# load("@rules_go//go:def.bzl", "go_library")
+
+# go_library(
+#     name = "pkg",
+#     srcs = ["controller.go"],
+#     importpath = "github.com/wrallen/sampleBazel3/pkg",
+#     visibility = ["//visibility:public"],
+#     deps = ["@org_uber_go_zap//:zap"],
+# )

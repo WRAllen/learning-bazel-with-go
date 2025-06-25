@@ -2,7 +2,7 @@
 
 这是一个多层次的有依赖第三方包的go的web项目
 
-介绍了基于gazelle如何去自动生成BUILD.bazel文件
+介绍了基于gazelle如何去自动更新/生成BUILD.bazel文件
 
 # 运行方式
 
@@ -46,11 +46,11 @@ make run
 2 directories, 10 files
 ```
 
-该项目主要介绍了如果有第三方的包的依赖，如果在Bazel里面做好，sampleBazel2由于用的都是go内置的包，所以不涉及。该web项目使用了第三方的zap包，替代2里面和日志相关的输出
+该项目主要介绍了如果有第三方的包的依赖，如何在Bazel里面做好，sampleBazel2由于用的都是go内置的包，所以不涉及。该web项目使用了第三方的zap包，替代2里面和日志相关的输出
 
 这里zap只是作为一个例子，其他的依赖也是同理。
 
-最重要的在于在MODULE里面定义好gazelle相关的部分，下面摘出相关部分代码，具体说明请到对应文件里面阅读
+最重要是在MODULE里面定义好gazelle相关的部分，下面摘出gazelle相关代码，具体说明注释请到对应文件里面阅读
 
 ```
 bazel_dep(name = "gazelle", version = "0.43.0")
@@ -81,7 +81,7 @@ gazelle(name = "gazelle")
 
 只需要在你每个目录下面创建一个BUILD文件，写上上面2行
 
-然后再运行
+然后再运行如下命令
 
 ```
 # 或者是Makefile里面写好的make generate
@@ -89,10 +89,13 @@ bazel run //:gazelle
 
 ```
 
-他就会自动的去更新对应BUILD文件里面的内容，把需要用到的第三方依赖写到BUILD里面的deps里，然后就可以更新到MODULE里面的use_repo下，具体也是见根目录的BUILD和pkg下面的BUILD。
+他就会自动的去更新对应BUILD文件里面的内容(也可以不写，只写根目录的BUILD，然后其他BUILD通过上面的gazelle命令进行自动生成)，帮你编写BUILD文件需要的一切，
+
+比如go_library这些，他都会自动去生成，并且会把需要用到的第三方依赖写到BUILD里面的deps里，然后就可以更新到MODULE里面的use_repo下，
+
+具体也是见根目录的BUILD和pkg下面的BUILD。
 
 至此就完成了有第三方依赖的项目
-
 
 ## 运行结果
 
