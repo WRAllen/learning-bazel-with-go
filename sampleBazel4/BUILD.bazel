@@ -1,0 +1,21 @@
+# 本文件除了注释上标注的为手写外，其余都是自动生成
+# 手写
+load("@gazelle//:def.bzl", "gazelle")
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+# 手写
+gazelle(name = "gazelle")
+
+go_library(
+    name = "sampleBazel4_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/wrallen/sampleBazel4",
+    visibility = ["//visibility:private"],
+    deps = ["//cmd"],
+)
+
+go_binary(
+    name = "sampleBazel4",
+    embed = [":sampleBazel4_lib"],
+    visibility = ["//visibility:public"],
+)

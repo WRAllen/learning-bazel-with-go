@@ -1,0 +1,16 @@
+# 本文件所有内容由gazelle自动生成
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "cmd",
+    srcs = [
+        "root.go",
+        "serve.go",
+    ],
+    importpath = "github.com/wrallen/sampleBazel4/cmd",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg",
+        "@com_github_spf13_cobra//:cobra",
+    ],
+)

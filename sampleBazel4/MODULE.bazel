@@ -1,0 +1,19 @@
+module(
+    name = "sample_bazel_4",
+    version = "1.0",
+)
+
+bazel_dep(name = "rules_go", version = "0.54.1")
+bazel_dep(name = "gazelle", version = "0.43.0")
+
+my_go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
+my_go_sdk.download(version = "1.24.2")
+
+go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
+go_deps.from_file(go_mod = "//:go.mod")
+use_repo(
+    go_deps,
+    # 运行bazel mod tidy后自动生成
+    "com_github_spf13_cobra",
+    "org_uber_go_zap",
+)
