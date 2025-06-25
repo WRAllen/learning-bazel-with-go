@@ -10,8 +10,8 @@
 # 清除Bazel生成的文件
 make clean
 
-# 使用gazelle生成BUILD文件（这里其实已经生成好了）
-make build
+# 使用gazelle更新BUILD文件
+make generate
 
 # 使用Bazel进行打包
 make build

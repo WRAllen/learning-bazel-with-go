@@ -89,5 +89,6 @@ Hello, Bazel Bzlmod!
 |--------|------|
 | 🔹 [sampleBazel](./sampleBazel) | 最简单的go结合Bazel的例子，go会在控制台输出一串字符串<br>这里主要介绍一个最简单的基于Bazel的go项目是怎么做的。<br> |
 | 🔹 [sampleBazel2](./sampleBazel2) | 这是一个多层次的简单go服务<br>主要用于展示go里面多个包之间存着引用时，BUILD要怎么写。<br> |
-| 🔹 [sampleBazel3](./sampleBazel3) | 这是一个多层次的有依赖第三方包的go的web项目<br>介绍了基于gazelle如何去自动更新/生成BUILD.bazel文件<br> |
+| 🔹 [sampleBazel3](./sampleBazel3) | 这是一个多层次的有依赖第三方包的go的web项目<br>介绍了基于gazelle如何去自动更新BUILD.bazel文件<br> |
+| 🔹 [sampleBazel4](./sampleBazel4) | 基于sampleBazel3，添加了cobra让项目变成一个cli项目，添加了新的文件夹<br>介绍了通过gazelle如何去自动生成BUILD.bazel文件，以及如何自动更新依赖<br> |
 <!-- END SUBPROJECTS -->

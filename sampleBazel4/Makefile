@@ -8,7 +8,7 @@ generate:
 build:
 	bazel build //:sampleBazel4
 
-run: clean build
+run: clean generate build
 	bazel run //:sampleBazel4 -- serve
 
 go-run:

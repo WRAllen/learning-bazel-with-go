@@ -2,11 +2,22 @@
 
 基于sampleBazel3，添加了cobra让项目变成一个cli项目，添加了新的文件夹
 
-介绍了通过gazelle如何去自动生成BUILD.bazel文件
+介绍了通过gazelle如何去自动生成BUILD.bazel文件，以及如何自动更新依赖
 
 # 运行方式
 
 ```
+# 清除Bazel生成的文件
+make clean
+
+# 使用gazelle更新/创建BUILD文件
+make generate
+
+# 进行打包
+make build
+
+# 使用Bazel运行程序
+make run
 
 ```
 
@@ -19,48 +30,64 @@
 结构如下：
 
 ```
--> % tree   
+-> % tree
 .
 ├── BUILD.bazel
 ├── MODULE.bazel
 ├── MODULE.bazel.lock
 ├── Makefile
 ├── README.md
+├── cmd
+│   ├── BUILD.bazel
+│   ├── root.go
+│   └── serve.go
 ├── go.mod
 ├── go.sum
 ├── main.go
 └── pkg
     ├── BUILD.bazel
-    └── controller.go
+    └── service.go
 
-2 directories, 10 files
+3 directories, 13 files
 ```
 
-该项目主要介绍了如果有第三方的包的依赖，如何在Bazel里面做好，sampleBazel2由于用的都是go内置的包，所以不涉及。该web项目使用了第三方的zap包，替代2里面和日志相关的输出
+该项目基于sampleBazel3，在编写3的时候就发现使用bazel遇到两个不合理的地方
 
-这里zap只是作为一个例子，其他的依赖也是同理。
+1.需要手动去每个子项目里面写同样的两行代码
 
-最重要是在MODULE里面定义好gazelle相关的部分，下面摘出gazelle相关代码，具体说明注释请到对应文件里面阅读
+2.以及根目录BUILD.bazel里面的use_repo的更新感觉十分的麻烦。
+
+其实是可以做到自动化的，我们只需要按照下面步骤，即可实现自动化
+
+### 定义MODULE.bazel文件
+
+内容如下:
 
 ```
+module(
+    name = "sample_bazel_4",
+    version = "1.0",
+)
+
+bazel_dep(name = "rules_go", version = "0.54.1")
 bazel_dep(name = "gazelle", version = "0.43.0")
+
+my_go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
+my_go_sdk.download(version = "1.24.2")
 
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
-
-use_repo(go_deps, "org_uber_go_zap")
-
-```
-
-由于我也在学习阶段，这里被GPT坑了几次，相关的坑也写在MODULE.bazel文件里面了，这里还知道了一个bazel的命令
+use_repo(
+    go_deps
+)
 
 ```
-bazel mod tidy
-```
 
-这个同go的tidy，他会去整理文件会 **解析并检查你的 `MODULE.bazel` 文件，下载依赖，并更新 `.lock` 文件** ，以确保 Bazel 构建环境中的所有依赖是最小且一致的。
+其他的都同sampleBazel3，只是use_repo这里我们不写具体的依赖
 
-MODULE.bazel文件写完后，其他的BUILD.bazel文件就简单了，如下
+### 定义根目录的BUILD.bazel文件
+
+内容如下:
 
 ```
 load("@gazelle//:def.bzl", "gazelle")
@@ -69,49 +96,68 @@ gazelle(name = "gazelle")
 
 ```
 
-只需要在你每个目录下面创建一个BUILD文件，写上上面2行
-
-然后再运行如下命令
+还是一样写上面两行，然后运行如下命令去自动生成BUILD
 
 ```
-# 或者是Makefile里面写好的make generate
 bazel run //:gazelle
-
 ```
 
-他就会自动的去更新对应BUILD文件里面的内容，帮你编写BUILD文件需要的一切，（sampleBazel4里介绍如何自动生成BUILD）
+可以看到有如下的warn提示
 
-比如go_library这些，他都会自动去生成，并且会把需要用到的第三方依赖写到BUILD里面的deps里，然后就可以更新到MODULE里面的use_repo下，
+```
+WARNING: /Users/wangyu2/Work/learning-bazel-with-go/sampleBazel4/MODULE.bazel:12:24: The module extension go_deps defined in @gazelle//:extensions.bzl reported incorrect imports of repositories via use_repo():
 
-具体也是见根目录的BUILD和pkg下面的BUILD。
+Not imported, but reported as direct dependencies by the extension (may cause the build to fail):
+    com_github_spf13_cobra, org_uber_go_zap
 
-至此就完成了有第三方依赖的项目
+Fix the use_repo calls by running 'bazel mod tidy'.
+```
+
+这里sampleBazel3之前也介绍过了，其实他也提示了可以用 `bazel mod tidy`去fix，只是当时没发现。
+
+运行后，会发现子目录cmd和pkg里面自动生成了BUILD文件，但是use_repo这里还是空的，这个时候直接去BUILD就会报错
+
+所以我们运行tidy命令，就会发现他自动的去填充了use_repo需要的依赖了。
+
+至此就完成了自动生成BUILD，自动导入基于go.mod的依赖
+
 
 ## 运行结果
 
 运行输出如下
 
 ```
--> % make run  
+-> % make run
 bazel clean --expunge
 INFO: Starting clean (this may take a while). Use --async if the clean takes more than several minutes.
-bazel build //:sampleBazel3
+bazel run //:gazelle
 Starting local Bazel server (8.3.0) and connecting to it...
-INFO: Analyzed target //:sampleBazel3 (97 packages loaded, 6058 targets configured).
+INFO: Analyzed target //:gazelle (126 packages loaded, 8577 targets configured).
 INFO: Found 1 target...
-Target //:sampleBazel3 up-to-date:
-  bazel-bin/sampleBazel3_/sampleBazel3
-INFO: Elapsed time: 69.904s, Critical Path: 36.33s
-INFO: 21 processes: 6 internal, 15 darwin-sandbox.
-INFO: Build completed successfully, 21 total actions
-bazel run //:sampleBazel3
-INFO: Analyzed target //:sampleBazel3 (32 packages loaded, 316 targets configured).
+Target //:gazelle up-to-date:
+  bazel-bin/gazelle-runner.bash
+  bazel-bin/gazelle
+INFO: Elapsed time: 89.906s, Critical Path: 53.94s
+INFO: 67 processes: 18 internal, 49 darwin-sandbox.
+INFO: Build completed successfully, 67 total actions
+INFO: Running command line: bazel-bin/gazelle
+bazel mod tidy
+bazel build //:sampleBazel4
+INFO: Analyzed target //:sampleBazel4 (46 packages loaded, 440 targets configured).
 INFO: Found 1 target...
-Target //:sampleBazel3 up-to-date:
-  bazel-bin/sampleBazel3_/sampleBazel3
-INFO: Elapsed time: 0.627s, Critical Path: 0.00s
+Target //:sampleBazel4 up-to-date:
+  bazel-bin/sampleBazel4_/sampleBazel4
+INFO: Elapsed time: 3.945s, Critical Path: 2.12s
+INFO: 20 processes: 4 internal, 16 darwin-sandbox.
+INFO: Build completed successfully, 20 total actions
+bazel run //:sampleBazel4 -- serve
+INFO: Analyzed target //:sampleBazel4 (0 packages loaded, 0 targets configured).
+INFO: Found 1 target...
+Target //:sampleBazel4 up-to-date:
+  bazel-bin/sampleBazel4_/sampleBazel4
+INFO: Elapsed time: 0.238s, Critical Path: 0.00s
 INFO: 1 process: 1 internal.
 INFO: Build completed successfully, 1 total action
-INFO: Running command line: bazel-bin/sampleBazel3_/sampleBazel3
-{"level":"info","ts":1750763064.1256928,"caller":"pkg/controller.go:25","msg":"Starting server","port":"8080"}
+INFO: Running command line: bazel-bin/sampleBazel4_/sampleBazel4 <args omitted>
+{"level":"info","time":"2025-06-25 11:16:21.680","caller":"pkg/service.go:31","msg":"Starting server","port":"8080"}
 ```
