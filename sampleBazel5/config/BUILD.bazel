@@ -10,7 +10,9 @@ go_library(
 
 # 手写
 # 通过这个方法来声明文件相关的，filegroup是Bazel中最简单最通用的“文件聚合器”
-# 作为：创建一组文件供其他目标依赖，使用，但是自己不会参于
+# 作为：创建一组文件供其他目标依赖，使用，但是自己不会参与构建或编译
+# filegroup 就像一个“文件清单”，它不会生成任何产物，只是把一堆文件包装成一个 target，
+# 供其他地方引用（比如 go_binary(data = [...])）。
 filegroup(
     name = "all_configs",
     srcs = glob(["*.yaml"]),
