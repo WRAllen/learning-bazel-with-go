@@ -2,19 +2,15 @@ package pkg
 
 import (
 	"fmt"
-	"net/http"
+	"net"
 
+	"github.com/wrallen/sampleBazel6/api"
 	"github.com/wrallen/sampleBazel6/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
-
-func helloHandler(logger *zap.Logger) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		logger.Info("Received request", zap.String("method", r.Method), zap.String("url", r.URL.String()))
-		fmt.Fprintln(w, "Hello, World! 🌍")
-	}
-}
 
 func Run() {
 	cfg := zap.NewProductionConfig()
@@ -29,12 +25,24 @@ func Run() {
 	defer logger.Sync()
 
 	port := config.Global.Port
-	logger.Info("Starting server", zap.String("port", port))
 
-	http.HandleFunc("/", helloHandler(logger))
-
-	err = http.ListenAndServe(":"+port, nil)
+	// 启动一个监听器
+	lis, err := net.Listen("tcp", ":"+port)
 	if err != nil {
-		logger.Fatal("Server failed to start", zap.Error(err))
+		panic(fmt.Sprintf("Failed to listen on port %s: %v", port, err))
+	}
+
+	// grpc服务创建
+	grpcServer := grpc.NewServer()
+	// 注册hello相关接口
+	api.RegisterHelloServiceServer(grpcServer, &HelloServer{})
+
+	// 可选开启 reflection，方便使用 grpcurl 进行调试
+	// 例如通过 grpcurl -plaintext localhost:8080 list 查看当前的所有grpc服务
+	reflection.Register(grpcServer)
+
+	logger.Info("Starting gRPC server", zap.String("port", port))
+	if err := grpcServer.Serve(lis); err != nil {
+		panic(fmt.Sprintf("Failed to start gRPC server: %v", err))
 	}
 }

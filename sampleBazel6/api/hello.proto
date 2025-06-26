@@ -1,0 +1,32 @@
+// 声明proto的版本
+syntax = "proto3";
+
+// 定义proto的包名，用于自动生成代码是防止命名冲突，go会用下面的go_package字段来作为包名
+package api.hello.v1;
+
+// 下面这种写法，最后生成的.pb.go文件中，package是api 
+option go_package = "github.com/wrallen/sampleBazel6/api/hello/v1;api";
+// 下面这种写法，最后生成的.pb.go文件中，package是v1
+// go_package = "github.com/wrallen/sampleBazel6/api/hello/v1";
+// 但是他们的import都是"github.com/wrallen/sampleBazel6/api/hello/v1"
+
+
+// HelloService
+service HelloService {
+    // Hello
+    // 定义一个GET方法，输入参数是HelloRequest，输出参数是HelloResponse
+    rpc Hello(HelloRequest) returns (HelloResponse) {
+    };
+}
+
+// HelloRequest 
+message HelloRequest {
+    //  随便定义一个参数，proto3里面所有的字段都是optional
+    string name = 1;
+}
+
+// HelloResponse
+message HelloResponse {
+    // 随便定义一个返回参数
+    string message = 1;
+}
