@@ -92,4 +92,5 @@ Hello, Bazel Bzlmod!
 | 🔹 [sampleBazel3](./sampleBazel3) | 这是一个多层次的有依赖第三方包的go的web项目<br>介绍了基于gazelle如何去自动更新BUILD.bazel文件<br> |
 | 🔹 [sampleBazel4](./sampleBazel4) | 基于sampleBazel3，添加了cobra让项目变成一个cli项目，添加了新的文件夹<br>介绍了通过gazelle如何去自动生成BUILD.bazel文件，以及如何自动更新依赖<br> |
 | 🔹 [sampleBazel5](./sampleBazel5) | 基于sampleBazel4，添加了配置文件相关的内容<br>介绍了在gazelle自动生成BUILD后，如何把配置文件一起打包<br> |
+| 🔹 [sampleBazel6](./sampleBazel6) | 基于sampleBazel5，添加了proto相关的部分(暂时手动生成pb.go)<br>介绍了有proto文件时如何用bazel进行打包，启动一个grpc服务。<br> |
 <!-- END SUBPROJECTS -->
