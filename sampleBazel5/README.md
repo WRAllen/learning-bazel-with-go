@@ -22,6 +22,8 @@ make run
 # 使用build好的可执行文件直接跑
 make only-run
 
+# 直接用go跑
+make go-run
 ```
 
 # 具体说明
@@ -100,7 +102,6 @@ data = ["//config:all_configs"],
 这里指的是，用config文件下的all_configs资源，具体注释详见文件
 
 这样就ok了，然后我们就能把config下的配置都进行打包了
-
 
 ## 运行结果
 

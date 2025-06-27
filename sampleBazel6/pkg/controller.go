@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/wrallen/sampleBazel6/api"
+	api "github.com/wrallen/sampleBazel6/api/hello/v1"
 )
 
 type HelloServer struct {

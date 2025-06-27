@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/wrallen/sampleBazel6/api"
+	api "github.com/wrallen/sampleBazel6/api/hello/v1"
 	"github.com/wrallen/sampleBazel6/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

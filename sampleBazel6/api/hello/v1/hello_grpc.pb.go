@@ -4,7 +4,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v4.25.3
-// source: api/hello.proto
+// source: api/hello/v1/hello.proto
 
 // 定义proto的包名，用于自动生成代码是防止命名冲突，go会用下面的go_package字段来作为包名
 
@@ -129,5 +129,5 @@ var HelloService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/hello.proto",
+	Metadata: "api/hello/v1/hello.proto",
 }

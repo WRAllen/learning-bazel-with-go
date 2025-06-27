@@ -7,7 +7,7 @@ generate-proto:
 	protoc \
 		--go_out=. --go-grpc_out=. \
 		--go_opt=paths=source_relative --go-grpc_opt=paths=source_relative \
-		api/*.proto
+		api/hello/v1/*.proto
 
 clean:
 	bazel clean --expunge
@@ -17,13 +17,13 @@ generate:
 	bazel mod tidy
 
 build:
-	bazel build //:sampleBazel5
+	bazel build //:sampleBazel6
 
 run: clean generate build
-	bazel run //:sampleBazel5 -- serve
+	bazel run //:sampleBazel6 -- serve
 
 only-run:
-	bazel run //:sampleBazel5 -- serve
+	bazel run //:sampleBazel6 -- serve
 
 go-run:
 	go run main.go serve
