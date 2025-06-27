@@ -19,8 +19,8 @@ generate:
 build:
 	bazel build //:sampleBazel6
 
-run: clean generate build
-	bazel run //:sampleBazel6 -- serve
+# run: clean generate build
+# 	bazel run //:sampleBazel6 -- serve
 
 only-run:
 	bazel run //:sampleBazel6 -- serve
