@@ -35,10 +35,3 @@ go_library(
     importpath = "github.com/wrallen/sampleBazel7/api/hello/v1",
     visibility = ["//visibility:public"],
 )
-
-# go_library(
-#     name = "hello",
-#     embed = [":api_go_proto"],
-#     importpath = "github.com/wrallen/sampleBazel7/api/hello/v1",
-#     visibility = ["//visibility:public"],
-# )
