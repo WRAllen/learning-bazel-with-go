@@ -53,8 +53,6 @@ grpc文件：gRPC 客户端 & 服务端接口定义
 
 grpc文件是基于pb文件的，因为他里面用到了pb定义的结构体等
 
-
-
 ## 运行结果
 
 运行输出如下
@@ -124,3 +122,37 @@ INFO: Build completed successfully, 1033 total actions
 ```
 
 可以看到生成了hello.pb.go和hello_grpc.pb.go
+
+
+## gazelle使用说明
+
+在测试这个项目的时候，通过把MODULE文件里面的bazel_dep给注释了后，在通过gazelle去自动生成api下的BUILD发现
+
+gazelle生成的BUILD文件最上面的load，比如
+
+`load("@rules_proto//proto:defs.bzl","proto_library")`
+
+其实和MODULE里面写没写如下内容没有关系
+
+`bazel_dep(name ="rules_proto", version ="7.1.0")`
+
+但是后续 `bazel build`时如果MODULE里面没有对应依赖就会报错
+
+
+由于我本地也有protoc，其实可以不使用拓展里面的protoc，那简化后的MODULE文件如下
+
+```
+module(
+    name = "sample_bazel_7",
+    version = "1.0",
+)
+
+bazel_dep(name = "rules_go", version = "0.55.1")
+bazel_dep(name = "gazelle", version = "0.44.0")
+# 添加和proto相关的
+bazel_dep(name = "rules_proto", version = "7.1.0")
+
+go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
+go_deps.from_file(go_mod = "//:go.mod")
+
+```
