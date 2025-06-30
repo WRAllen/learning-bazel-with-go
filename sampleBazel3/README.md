@@ -22,8 +22,6 @@ make run
 
 # 具体说明
 
-下面是对改项目的具体说明
-
 ## 项目结构
 
 结构如下：
@@ -132,7 +130,6 @@ Not imported, but reported as direct dependencies by the extension (may cause th
 ```
 
 把这些摘抄到use_repo里面就行（sampleBazel4里面介绍如何自动生成相关依赖）
-
 
 至此就完成了有第三方依赖的项目
 

@@ -15,11 +15,11 @@ brew install bazelisk
 如果是brew进行直接安装bazel，可能安装的版本比较老，这里我用bazelisk，安装好bazelisk其实你就安装上了最新版本的Bazel了，默认会在如下位置
 
 ```shell
--> % which bazel    
+-> % which bazel  
 /usr/local/bin/bazel
 ```
 
-本项目使用的是如下版本：
+本项目使用的是如下版本(后续教程版本>=8.2.1)：
 
 ```
 Bazelisk version: 1.25.0
@@ -93,4 +93,5 @@ Hello, Bazel Bzlmod!
 | 🔹 [sampleBazel4](./sampleBazel4) | 基于sampleBazel3，添加了cobra让项目变成一个cli项目，添加了新的文件夹<br>介绍了通过gazelle如何去自动生成BUILD.bazel文件，以及如何自动更新依赖<br> |
 | 🔹 [sampleBazel5](./sampleBazel5) | 基于sampleBazel4，添加了配置文件相关的内容<br>介绍了在gazelle自动生成BUILD后，如何把配置文件一起打包<br> |
 | 🔹 [sampleBazel6](./sampleBazel6) | 基于sampleBazel5，添加了proto相关的部分(暂时手动生成pb.go)<br>介绍了有proto文件时如何用bazel进行打包，启动一个grpc服务。<br> |
+| 🔹 [sampleBazel7](./sampleBazel7) | 介绍通过bazel基于proto文件生成pb，grpc文件<br> |
 <!-- END SUBPROJECTS -->

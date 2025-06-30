@@ -34,8 +34,6 @@ make go-run
 
 # 具体说明
 
-下面是对改项目的具体说明
-
 ## 项目结构
 
 结构如下：
@@ -138,8 +136,6 @@ grpcurl -plaintext localhost:8080 list api.hello.v1.HelloService
 
 api.hello.v1.HelloService.Hello
 ```
-
-
 
 测试接口
 

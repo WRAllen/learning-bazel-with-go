@@ -23,8 +23,6 @@ make run
 
 # 具体说明
 
-下面是对改项目的具体说明
-
 ## 项目结构
 
 结构如下：
@@ -120,7 +118,6 @@ Fix the use_repo calls by running 'bazel mod tidy'.
 所以我们运行tidy命令，就会发现他自动的去填充了use_repo需要的依赖了。
 
 至此就完成了自动生成BUILD，自动导入基于go.mod的依赖
-
 
 ## 运行结果
 

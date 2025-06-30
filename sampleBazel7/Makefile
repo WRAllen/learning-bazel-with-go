@@ -5,6 +5,7 @@ generate:
 	bazel run //:gazelle
 	bazel mod tidy
 
-build: generate
+# build前记得先去改一下api下面的BUILD文件
+build:
 	bazel build //api/hello/v1:hello
 
