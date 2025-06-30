@@ -1,8 +1,6 @@
 # 介绍
 
-基于sampleBazel5，添加了proto相关的部分(暂时手动生成pb.go)
-
-介绍了有proto文件时如何用bazel进行打包，启动一个grpc服务。
+如何基于proto文件生成pb文件和对应的grpc文件
 
 # 运行方式
 
@@ -138,8 +136,6 @@ grpcurl -plaintext localhost:8080 list api.hello.v1.HelloService
 
 api.hello.v1.HelloService.Hello
 ```
-
-
 
 测试接口
 
