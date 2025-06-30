@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 
+	api "github.com/wrallen/sampleBazel7/api/hello/v1"
 	"github.com/wrallen/sampleBazel7/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -34,7 +35,7 @@ func Run() {
 	// grpc服务创建
 	grpcServer := grpc.NewServer()
 	// 注册hello相关接口
-	// api.RegisterHelloServiceServer(grpcServer, &HelloServer{})
+	api.RegisterHelloServiceServer(grpcServer, &HelloServer{})
 
 	// 可选开启 reflection，方便使用 grpcurl 进行调试
 	// 例如通过 grpcurl -plaintext localhost:8080 list 查看当前的所有grpc服务

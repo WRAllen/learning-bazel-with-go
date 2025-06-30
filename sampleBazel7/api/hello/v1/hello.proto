@@ -4,11 +4,8 @@ syntax = "proto3";
 // 定义proto的包名，用于自动生成代码是防止命名冲突，go会用下面的go_package字段来作为包名
 package api.hello.v1;
 
-// 下面这种写法，最后生成的.pb.go文件中，package是api 
-option go_package = "github.com/wrallen/sampleBazel6/api/hello/v1;api";
-// 下面这种写法，最后生成的.pb.go文件中，package是v1
-// go_package = "github.com/wrallen/sampleBazel6/api/hello/v1";
-// 但是他们的import都是"github.com/wrallen/sampleBazel6/api/hello/v1"
+// 定义go的包名
+option go_package = "github.com/wrallen/sampleBazel7/api/hello/v1;api";
 
 
 // HelloService
