@@ -9,13 +9,14 @@ generate:
 build-proto:
 	bazel build //api/hello/v1:hello
 
+# 移动pb/grpc文件到api下
 move-proto:
 	./copy_proto_outputs.sh
 
 build:
 	bazel build //:sampleBazel8
 
-only-run:
+run:
 	bazel run //:sampleBazel8 -- serve
 
 go-run:

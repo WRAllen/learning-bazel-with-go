@@ -9,6 +9,8 @@ go_library(
     importpath = "github.com/wrallen/sampleBazel8/pkg",
     visibility = ["//visibility:public"],
     deps = [
+        # 在pb/grpc文件生成后，手动添加
+        "//api/hello/v1:hello",
         "//config",
         "@org_golang_google_grpc//:grpc",
         "@org_golang_google_grpc//reflection",

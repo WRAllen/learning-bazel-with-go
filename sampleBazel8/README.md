@@ -2,22 +2,11 @@
 
 基于sampleBazel7的自动生成pb/gprc，结合6的web项目
 
-说明如何做到先写proto在写接口服务
+说明如何做到先写proto再写接口服务，然后build项目。
 
 # 运行方式
 
-```
-
-# 清除Bazel生成的文件
-make clean
-
-# 使用gazelle更新/创建BUILD文件
-make generate
-
-# 进行文件生成
-make build
-
-```
+详见Makefile文件
 
 # 具体说明
 
@@ -26,7 +15,36 @@ make build
 结构如下：
 
 ```
-
+-> % tree
+.
+├── BUILD.bazel
+├── MODULE.bazel
+├── MODULE.bazel.lock
+├── Makefile
+├── README.md
+├── api
+│   └── hello
+│       └── v1
+│           ├── BUILD.bazel
+│           ├── hello.pb.go	 # 后续生成
+│           ├── hello.proto
+│           └── hello_grpc.pb.go # 后续生成
+├── cmd
+│   ├── BUILD.bazel
+│   ├── root.go
+│   └── serve.go
+├── config
+│   ├── BUILD.bazel
+│   ├── config.go
+│   └── config.yaml
+├── copy_proto_outputs.sh
+├── go.mod
+├── go.sum
+├── main.go
+└── pkg
+    ├── BUILD.bazel
+    ├── controller.go
+    └── service.go
 ```
 
 流程如下
@@ -39,7 +57,7 @@ make build
 
 然后编写proto文件，基于proto生成grpc代码，在服务里面继承实现这个接口，启动服务时注册对应的接口即可
 
-# 运行结果
+# 运行过程
 
 ### 生成BUILD
 
@@ -97,11 +115,9 @@ bazel-bin/api/hello/v1/api_go_proto_/github.com/wrallen/sampleBazel8/api/hello/v
 ✅ Done.
 ```
 
-
 ## 继承编写接口
 
 通过从hello_grpc.pb.go里面写好的空接口，然后集成到自己的服务里面，我这里就是把定义的接口，在controller.go里面继承实现了一下
-
 
 ## 测试go是否能直接运行
 
@@ -114,13 +130,12 @@ bazel-bin/api/hello/v1/api_go_proto_/github.com/wrallen/sampleBazel8/api/hello/v
 
 发现是ok的
 
-
 ## 在pkg里面引用api
 
 这个时候如果直接用bazel build的话会出现如下问题
 
 ```
--> % make build    
+-> % make build  
 bazel build //:sampleBazel8
 INFO: Analyzed target //:sampleBazel8 (51 packages loaded, 324 targets configured).
 ERROR: /Users/wangyu2/Work/learning-bazel-with-go/sampleBazel8/pkg/BUILD.bazel:3:11: GoCompilePkg pkg/pkg.a failed: (Exit 1): builder failed: error executing GoCompilePkg command (from target //pkg:pkg) bazel-out/darwin_x86_64-opt-exec-ST-d57f47055a04/bin/external/rules_go++go_sdk+main___download_0/builder_reset/builder compilepkg -sdk external/rules_go++go_sdk+main___download_0 -goroot ... (remaining 35 arguments skipped)
@@ -139,11 +154,40 @@ ERROR: Build did NOT complete successfully
 make: *** [build] Error 1
 ```
 
-可以发现是引用出了问题，其实就是pkg那边用api这边的定义的时候bazel不知道是啥东西，因为pkg里面用的是后来生成的文件，所以这里我们再次运行
+可以发现是引用出了问题，其实就是pkg那边用api这边的定义的时候bazel不知道是啥东西，因为pkg里面用的是后来生成的文件，
 
+这里我们再次运行 `make generate` 的话会覆盖掉之前api生成proto相关的部分，这里不用gazelle去自动更新BUILD，这里我们手动在pkg的BUILD的deps添加如下内容即可
+
+```
+"//api/hello/v1:hello"
+```
 
 ## 使用bazel进行打包
 
 ```
+-> % make build   
+bazel build //:sampleBazel8
+INFO: Analyzed target //:sampleBazel8 (1 packages loaded, 484 targets configured).
+INFO: Found 1 target...
+Target //:sampleBazel8 up-to-date:
+  bazel-bin/sampleBazel8_/sampleBazel8
+INFO: Elapsed time: 0.886s, Critical Path: 0.31s
+INFO: 3 processes: 1086 action cache hit, 2 internal, 1 darwin-sandbox.
+INFO: Build completed successfully, 3 total actions
+```
 
+## 运行服务
+
+```
+-> % make run  
+bazel run //:sampleBazel8 -- serve
+INFO: Analyzed target //:sampleBazel8 (0 packages loaded, 0 targets configured).
+INFO: Found 1 target...
+Target //:sampleBazel8 up-to-date:
+  bazel-bin/sampleBazel8_/sampleBazel8
+INFO: Elapsed time: 0.238s, Critical Path: 0.00s
+INFO: 1 process: 1 internal.
+INFO: Build completed successfully, 1 total action
+INFO: Running command line: bazel-bin/sampleBazel8_/sampleBazel8 <args omitted>
+{"level":"info","time":"2025-07-01 16:05:10.401","caller":"pkg/service.go:44","msg":"Starting gRPC server","port":"8080"}
 ```
