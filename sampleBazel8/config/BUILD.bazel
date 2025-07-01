@@ -1,0 +1,16 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "config",
+    srcs = ["config.go"],
+    importpath = "github.com/wrallen/sampleBazel8/config",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_spf13_viper//:viper"],
+)
+
+# 手写
+filegroup(
+    name = "all_configs",
+    srcs = glob(["*.yaml"]),
+    visibility = ["//visibility:public"],
+)
