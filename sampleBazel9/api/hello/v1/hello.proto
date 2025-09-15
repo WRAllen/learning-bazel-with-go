@@ -34,7 +34,7 @@ service HelloService {
 message HelloRequest {
     // 原始的如下
     // string name = 1;
-    // 后面的(google.api.field_behavior) = REQUIRED也是annotations.proto里面定义的
+    // 这里依赖"google/api/field_behavior.proto";
     string name = 1  [(google.api.field_behavior) = REQUIRED];
 }
 
