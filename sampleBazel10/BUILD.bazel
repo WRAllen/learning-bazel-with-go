@@ -1,0 +1,5 @@
+# 手写
+load("@gazelle//:def.bzl", "gazelle")
+
+# 手写
+gazelle(name = "gazelle")
