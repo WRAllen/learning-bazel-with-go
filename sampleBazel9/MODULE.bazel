@@ -3,23 +3,17 @@ module(
     version = "1.0",
 )
 
-bazel_dep(name = "rules_go", version = "0.55.1")
-bazel_dep(name = "gazelle", version = "0.44.0")
-
 # 添加和proto相关的
 bazel_dep(name = "rules_proto", version = "7.1.0")
+
+# 添加 Go 规则用于生成 gRPC 代码
+bazel_dep(name = "rules_go", version = "0.55.1")
 
 # 添加自动生成pb相关的protoc依赖
 bazel_dep(name = "toolchains_protoc", version = "0.4.3")
 
 # 添加 protobuf 依赖 这里这个就是proto里面用到的timestamp/empty的依赖
 bazel_dep(name = "protobuf", version = "29.1")
-
-my_go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
-my_go_sdk.download(version = "1.24.2")
-
-go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
-go_deps.from_file(go_mod = "//:go.mod")
 
 # 使用protoc的扩展
 protoc = use_extension("@toolchains_protoc//protoc:extensions.bzl", "protoc")

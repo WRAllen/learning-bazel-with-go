@@ -1,20 +1,13 @@
-load("@gazelle//:def.bzl", "gazelle")
-load("@rules_go//go:def.bzl", "go_binary", "go_library")
+# 这是一个专注于 proto 和 gRPC 代码生成的 Bazel 项目
+# 展示如何通过 Bazel 自动处理 proto 依赖和生成代码
 
-# gazelle:prefix github.com/wrallen/sampleBazel9
-gazelle(name = "gazelle")
+load("@rules_proto//proto:defs.bzl", "proto_library")
 
-# 主程序
-go_binary(
-    name = "sample_bazel_9",
-    embed = [":sampleBazel9_lib"],
+# 根目录的 proto 库，用于演示
+proto_library(
+    name = "all_protos",
+    deps = [
+        "//api/hello/v1:api_proto",
+    ],
     visibility = ["//visibility:public"],
-)
-
-go_library(
-    name = "sampleBazel9_lib",
-    srcs = ["main.go"],
-    importpath = "github.com/wrallen/sampleBazel9",
-    visibility = ["//visibility:private"],
-    deps = ["//api/hello/v1:hello"],
 )
