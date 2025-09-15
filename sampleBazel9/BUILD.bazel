@@ -1,9 +1,0 @@
-# 这是一个专注于 proto 和 gRPC 代码生成的 Bazel 项目
-# 展示如何通过 Bazel 自动处理 proto 依赖和生成代码
-
-load("@gazelle//:def.bzl", "gazelle")
-
-# Gazelle 配置
-gazelle(
-    name = "gazelle",
-)
