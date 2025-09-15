@@ -37,7 +37,7 @@ go_proto_library(
     ],
 )
 
-# 手写
+# 把两个整合到一起，这样一个bazel build就可以创建2个文件
 go_library(
     name = "hello",
     # 下面添加上pb文件相关的
