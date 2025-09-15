@@ -1,13 +1,9 @@
 # 这是一个专注于 proto 和 gRPC 代码生成的 Bazel 项目
 # 展示如何通过 Bazel 自动处理 proto 依赖和生成代码
 
-load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@gazelle//:def.bzl", "gazelle")
 
-# 根目录的 proto 库，用于演示
-proto_library(
-    name = "all_protos",
-    deps = [
-        "//api/hello/v1:api_proto",
-    ],
-    visibility = ["//visibility:public"],
+# Gazelle 配置
+gazelle(
+    name = "gazelle",
 )
