@@ -4,6 +4,8 @@ syntax = "proto3";
 // 导入新的依赖
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
 
 // 定义proto的包名，用于自动生成代码是防止命名冲突，go会用下面的go_package字段来作为包名
 package api.hello.v1;
@@ -16,6 +18,11 @@ service HelloService {
     // Hello
     // 定义一个GET方法，输入参数是HelloRequest，输出参数是HelloResponse
     rpc Hello(HelloRequest) returns (HelloResponse) {
+        // 下面这option里面http注释相关的就是上面annotations.proto里面定义的
+        // 这个可以用来生成http服务
+        option (google.api.http) = {
+            get: "/v1/hello"
+        };
     };
     
     // 使用 Empty 和 Timestamp 的示例方法
@@ -25,8 +32,10 @@ service HelloService {
 
 // HelloRequest 
 message HelloRequest {
-    //  随便定义一个参数，proto3里面所有的字段都是optional
-    string name = 1;
+    // 原始的如下
+    // string name = 1;
+    // 后面的(google.api.field_behavior) = REQUIRED也是annotations.proto里面定义的
+    string name = 1  [(google.api.field_behavior) = REQUIRED];
 }
 
 // HelloResponse

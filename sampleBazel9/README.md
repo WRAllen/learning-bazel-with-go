@@ -36,9 +36,13 @@ sampleBazel9/
 
 这是一个专注于 **Bazel Proto 和 gRPC 代码生成** 的演示项目，展示如何通过 Bazel 自动处理 proto 文件中的新依赖并生成 gRPC 代码：
 
-下面是用到的第三方依赖
-- `google/protobuf/empty.proto`
-- `google/protobuf/timestamp.proto`
+下面是用到的第三方依赖的例子
+```
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+```
 
 最重要的就是MODULE.bazel里面添加这行
 ```

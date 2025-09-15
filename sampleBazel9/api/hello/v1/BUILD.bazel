@@ -10,6 +10,8 @@ proto_library(
     deps = [
         "@protobuf//:empty_proto",
         "@protobuf//:timestamp_proto",
+        "@googleapis//google/api:annotations_proto",
+        "@googleapis//google/api:field_behavior_proto",
     ],
 )
 
@@ -28,6 +30,10 @@ go_proto_library(
     compilers = ["@rules_go//proto:go_proto"],
     importpath = "github.com/wrallen/sampleBazel9/api/hello/v1",
     proto = ":api_proto",
+    deps = [
+        "@googleapis//google/api:annotations_go_proto",
+        "@googleapis//google/api:field_behavior_go_proto",
+    ],
     visibility = ["//visibility:public"],
 )
 
