@@ -1,0 +1,20 @@
+load("@gazelle//:def.bzl", "gazelle")
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+# gazelle:prefix github.com/wrallen/sampleBazel9
+gazelle(name = "gazelle")
+
+# 主程序
+go_binary(
+    name = "sample_bazel_9",
+    embed = [":sampleBazel9_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "sampleBazel9_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/wrallen/sampleBazel9",
+    visibility = ["//visibility:private"],
+    deps = ["//api/hello/v1:hello"],
+)
