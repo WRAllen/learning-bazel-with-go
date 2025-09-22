@@ -7,7 +7,10 @@ proto_library(
     srcs = ["hello.proto"],
     visibility = ["//visibility:public"],
     deps = [
-        "//google/api:api_proto",
+        # 这里gazelle自动生成的是"google/api:annotations_proto" 当成了内部包
+        "@googleapis//google/api:annotations_proto",
+        "@googleapis//google/api:field_behavior_proto",
+        "@googleapis//google/api:http_proto",
         "@protobuf//:empty_proto",
         "@protobuf//:timestamp_proto",
     ],
@@ -21,11 +24,13 @@ go_proto_library(
     proto = ":api_proto",
     visibility = ["//visibility:public"],
     deps = [
-        "//google/api:annotations_proto",
-        "//google/api:field_behavior_proto",
+        "@googleapis//google/api:annotations_go_proto",
+        "@googleapis//google/api:api_go_proto",
+        "@googleapis//google/api:field_behavior_go_proto",
     ],
 )
 
+# 手动
 go_library(
     name = "hello",
     embed = [":api_go_proto"],

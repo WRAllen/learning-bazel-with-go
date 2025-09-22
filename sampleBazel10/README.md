@@ -78,7 +78,7 @@ proto_library(
 )
 # 忽略其他
 ```
-可以发现protobuf和googleapis都是被当作外部依赖处理了，
+可以发现protobuf和googleapis都是被当作外部依赖处理了，所以sampleBazel10里面需要手动吧google/api都加上`@googleapis//`前缀
 
 
 这里为啥protobuf在gazelle下也能正常被当作是外部依赖呢
@@ -93,3 +93,5 @@ protoc.toolchain(
 ```python
 bazel_dep(name = "googleapis", version = "0.0.0-20250826-a92cee39")
 ```
+
+可以发现gazelle在和googleapis这些没有toolchain声明的其他第三方包的处理的时候不是很智能，希望后续官方可以优化一下
