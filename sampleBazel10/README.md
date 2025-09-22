@@ -2,6 +2,8 @@
 
 基于sampleBazel9的基础，使用gazelle去自动生成BUILD文件
 
+并且介绍了结合gazelle如何使用第三方的包
+
 # 运行方式
  
 运行gazelle自动生成api下的build文件
@@ -95,3 +97,16 @@ bazel_dep(name = "googleapis", version = "0.0.0-20250826-a92cee39")
 ```
 
 可以发现gazelle在和googleapis这些没有toolchain声明的其他第三方包的处理的时候不是很智能，希望后续官方可以优化一下
+
+不过还是有种方式可以避免gazelle把这些第三方的包当作是本地包
+
+比如你可以在api/hello/v1下的BUILD.bazel的头部添加下面的内容
+```python
+# gazelle:resolve proto proto google/api/annotations.proto @googleapis//google/api:annotations_proto
+# gazelle:resolve proto go google/api/annotations.proto  @org_golang_google_genproto_googleapis_api//annotations
+# gazelle:resolve proto proto google/api/http.proto @googleapis//google/api:http_proto
+# gazelle:resolve proto go google/api/http.proto  @org_golang_google_genproto_googleapis_api//annotations
+# gazelle:resolve proto proto google/api/field_behavior.proto @googleapis//google/api:field_behavior_proto
+# gazelle:resolve proto go google/api/field_behavior.proto  @org_golang_google_genproto_googleapis_api//annotations
+```
+那他自动生成的文件内容里面就会把google/api当作是第三方的包了

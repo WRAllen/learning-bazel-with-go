@@ -96,4 +96,5 @@ Hello, Bazel Bzlmod!
 | 🔹 [sampleBazel7](./sampleBazel7) | 介绍通过bazel基于proto文件生成pb，grpc文件<br> |
 | 🔹 [sampleBazel8](./sampleBazel8) | 基于sampleBazel7的自动生成pb/gprc，结合6的web项目<br>说明如何做到先写proto再写接口服务，然后build项目。<br> |
 | 🔹 [sampleBazel9](./sampleBazel9) | 基于sampleBazel8的基础，介绍了proto里面如果有引用到第三方的依赖<br>要如何进行处理和编写<br> |
+| 🔹 [sampleBazel10](./sampleBazel10) | 基于sampleBazel9的基础，使用gazelle去自动生成BUILD文件<br>并且介绍了结合gazelle如何使用第三方的包<br> |
 <!-- END SUBPROJECTS -->

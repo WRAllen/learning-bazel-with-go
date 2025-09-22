@@ -13,10 +13,35 @@ END_MARK="<!-- END SUBPROJECTS -->"
     echo "| 子项目 | 简介 |"
     echo "|--------|------|"
 
+    # 获取所有目录并按自定义顺序排序
+    dirs=()
     for dir in */; do
         [[ "$dir" == .* ]] && continue
         [[ ! -d "$dir" ]] && continue
-
+        dirs+=("$dir")
+    done
+    
+    # 自定义排序：sampleBazel, sampleBazel2-9, sampleBazel10
+    # 使用更精确的排序逻辑
+    sorted_dirs=()
+    
+    # 首先添加sampleBazel（没有数字的）
+    for dir in "${dirs[@]}"; do
+        if [[ "$dir" == "sampleBazel/" ]]; then
+            sorted_dirs+=("$dir")
+        fi
+    done
+    
+    # 然后按数字顺序添加sampleBazel2-10
+    for i in {2..10}; do
+        for dir in "${dirs[@]}"; do
+            if [[ "$dir" == "sampleBazel$i/" ]]; then
+                sorted_dirs+=("$dir")
+            fi
+        done
+    done
+    
+    for dir in "${sorted_dirs[@]}"; do
         name="${dir%/}"
         readme="$dir/README.md"
         intro="*暂无介绍内容*"
